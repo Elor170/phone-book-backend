@@ -1,0 +1,17 @@
+{
+  "name": "phone-book-backend",
+  "version": "1.0.0",
+  "description": "REST phone book API",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "author": "Elor Ifrach",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "morgan": "^1.10.0"
+  }
+}
