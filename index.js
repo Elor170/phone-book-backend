@@ -1,5 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
+import { Person } from './Services/database.js'
 
 let notes = [
   {
@@ -40,7 +41,10 @@ app.use(morgan(function (tokens, req, res) {
 app.use(express.static('dist'))
 
 app.get('/api/persons', (request, response) => {
-  response.json(notes)
+  Person.find({})
+    .then(people => {
+      response.json(people)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -73,15 +77,20 @@ app.post('/api/persons/', (request, response) => {
   if (!name || !number)
     response.status(400).json({ error: 'Name or number is missing' })
 
-  else if (notes.some(note => note.name === name)) {
-    response.status(400).json({ error: 'Name must be unique' })
-  }
+  // TODO: add check if person already exists
+  // else if (notes.some(note => note.name === name)) {
+  //   response.status(400).json({ error: 'Name must be unique' })
+  // }
 
   else {
-    const id = Math.round(1_000_000 * Math.random()).toString()
-    const newNote = { id, name, number }
-    notes.push(newNote)
-    response.json(newNote)
+    const newPerson = new Person({
+      name: name,
+      number: number
+    })
+    newPerson.save()
+    .then( res =>
+      response.json(res)
+    )
   }
 
 })
